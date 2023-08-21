@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import {Header} from './components/Header';
+import {Navbar} from './components/Navbar';
 import {Main} from './components/Main';
 
 const tempMovieData = [
@@ -54,7 +54,7 @@ export default function App() {
 
   return (
     <>
-      <Header/>
+      <Navbar movies={movies}/>
       <Main movies={movies} tempWatchedData={tempWatchedData}/>
     </>
   );
