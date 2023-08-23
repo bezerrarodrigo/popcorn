@@ -1,4 +1,7 @@
 //styles
+import {Start} from './Start';
+import {useState} from 'react';
+
 const containerStyle = {
   display: 'flex',
   alignItems: 'center',
@@ -7,7 +10,6 @@ const containerStyle = {
 
 const starContainerStyle = {
   display: 'flex',
-  gap: '4px'
 };
 
 const textStyle = {
@@ -17,14 +19,22 @@ const textStyle = {
 
 export const StarRating = ({maxRating = 5}) => {
 
+  //states
+  const [rating, setRating] = useState(1);
+
+  //functions
+  function handleSetRating(rating) {
+    setRating(rating);
+  }
+
   return (
     <div style={containerStyle}>
       <div style={starContainerStyle}>
         {Array.from({length: maxRating}, (_, i) => {
-          return <span>S{i + 1}</span>;
+          return <Start key={i} onRate={() => handleSetRating(i + 1)} full={rating >= i + 1}/>;
         })}
       </div>
-      <p style={textStyle}>10</p>
+      <p style={textStyle}>{rating || ''}</p>
     </div>
   );
 };
