@@ -5,9 +5,12 @@ const fullStarStyle = {
   cursor: 'pointer'
 };
 
-export const Start = ({onRate, full}) => {
+export const Start = ({onRate, full, onHoverIn, onHoverOut}) => {
   return (
-    <span role="button" style={fullStarStyle} onClick={onRate}>
+    <span role="button" style={fullStarStyle}
+          onClick={onRate}
+          onMouseEnter={onHoverIn}
+          onMouseLeave={onHoverOut}>
       {full ? <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 20 20"
