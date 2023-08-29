@@ -55,6 +55,7 @@ const tempWatchedData = [
 ];
 
 const KEY = 'cc5bf4c3';
+const query = 'terminator'
 
 export default function App() {
   
@@ -62,9 +63,14 @@ export default function App() {
   const [watched, setWatched] = useState([]);
   
   useEffect(() => {
-    fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=terminator`)
-    .then(res => res.json())
-    .then(data => setMovies(data.Search));
+    async function fetchMovies() {
+      const response = await fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=${query}`)
+      const data = await response.json()
+      setMovies(data.Search)
+    }
+    
+    fetchMovies();
+    
   }, []);
   
   return (
