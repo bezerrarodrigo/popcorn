@@ -56,6 +56,11 @@ export const MovieDetails = ({
 
   }, [selectedId]);
 
+  useEffect(() => {
+    if(!title) return;
+    document.title = `Movie: ${title}`;
+  }, [title]);
+
   //functions
   function handleAddWatchedMovie() {
 
@@ -68,8 +73,6 @@ export const MovieDetails = ({
       runtime: Number(runtime.split(' ').at(0)),
       userRating,
     };
-
-
     onAddWatchedMovie(newWatchedMovie);
     onCloseSelectedMovie();
   }
