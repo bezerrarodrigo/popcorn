@@ -59,6 +59,13 @@ export const MovieDetails = ({
   useEffect(() => {
     if(!title) return;
     document.title = `Movie: ${title}`;
+
+    // clean up
+    return () => {
+      document.title = 'usePopcorn';
+      console.log(`Clean up function for movie ${title}`);
+    };
+
   }, [title]);
 
   //functions
