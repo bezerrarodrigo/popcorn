@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 const containerStyle = {
   display: 'flex',
   alignItems: 'center',
-  gap: '16px'
+  gap: '16px',
 };
 
 const starContainerStyle = {
@@ -21,39 +21,39 @@ StarRating.propTypes = {
   className: PropTypes.string,
   messages: PropTypes.array,
   defaultRating: PropTypes.number,
-  onSetRating: PropTypes.func
-  
+  onSetRating: PropTypes.func,
+
 };
 
 
 export default function StarRating({
-  maxRating = 5,
-  color = '#fcc419',
-  size = 24,
-  className = '',
-  messages = [],
-  defaultRating = 0,
-  onSetRating,
-}) {
-  
+                                     maxRating = 5,
+                                     color = '#fcc419',
+                                     size = 24,
+                                     className = '',
+                                     messages = [],
+                                     defaultRating = 0,
+                                     onSetRating,
+                                   }) {
+
   //states
   const [rating, setRating] = useState(defaultRating);
   const [tempRating, setTempRating] = useState(0);
-  
+
   //functions
   function handleSetRating(rating) {
     setRating(rating);
     onSetRating(rating);
   }
-  
+
   function handleMouseIn(index) {
     setTempRating(index + 1);
   }
-  
+
   function handleMouseOut() {
     setTempRating(0);
   }
-  
+
   //styles
   const textStyle = {
     lineHeight: '1',
@@ -61,8 +61,8 @@ export default function StarRating({
     color,
     fontSize: `${size}px`,
   };
-  
-  
+
+
   return (
     <div className={className} style={containerStyle}>
       <div style={starContainerStyle}>
@@ -75,7 +75,8 @@ export default function StarRating({
         })}
       </div>
       <p
-        style={textStyle}>{messages.length === maxRating ? messages[tempRating ? tempRating - 1 : rating - 1] : tempRating || rating || ''}</p>
+        style={textStyle}>{messages.length === maxRating ?
+        messages[tempRating ? tempRating - 1 : rating - 1] : tempRating || rating || ''}</p>
     </div>
   );
 };

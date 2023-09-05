@@ -2,18 +2,31 @@ import {useEffect, useState} from "react";
 import StarRating from "./StarRating";
 import {Loader} from "./Loader";
 
-export const MovieDetails = ({selectedId, onCloseSelectedMovie}) => {
+export const MovieDetails = ({
+                               selectedId,
+                               onCloseSelectedMovie,
+                               onAddWatchedMovie,
+                               watchedMovies,
+                             }) => {
 
   //states
   const [movie, setMovie] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [userRating, setUserRating] = useState('');
 
-  //variables
+  //derived states
+  const isWatched = watchedMovies.map(movie => movie.imdbID).includes(selectedId);
+  const watchedMovieUserRating = watchedMovies.find(movie => {
+    return movie.imdbID === selectedId;
+  })?.userRating;
+
+
   const {
+    imdbRating,
     Title: title,
     Poster: poster,
     Runtime: runtime,
-    imdbRating,
+    Year,
     Plot: plot,
     Released: released,
     Actors: actors,
@@ -43,6 +56,24 @@ export const MovieDetails = ({selectedId, onCloseSelectedMovie}) => {
 
   }, [selectedId]);
 
+  //functions
+  function handleAddWatchedMovie() {
+
+    const newWatchedMovie = {
+      imdbID: selectedId,
+      poster,
+      title,
+      Year,
+      imdbRating: Number(imdbRating),
+      runtime: Number(runtime.split(' ').at(0)),
+      userRating,
+    };
+
+
+    onAddWatchedMovie(newWatchedMovie);
+    onCloseSelectedMovie();
+  }
+
 
   return (
 
@@ -62,7 +93,13 @@ export const MovieDetails = ({selectedId, onCloseSelectedMovie}) => {
           </header>
           <section>
             <div className="rating">
-              <StarRating maxRating={10} size={24} onSetRating={() => console.log('Votado!')}/>
+              {!isWatched ? <><StarRating maxRating={10} size={24} onSetRating={setUserRating}/>
+                  {userRating > 0 &&
+                    <button className="btn-add" onClick={handleAddWatchedMovie}>+ Add to
+                      watched
+                      list
+                    </button>}</> :
+                <p>You have already rated {watchedMovieUserRating} ⭐ for this movie.</p>}
             </div>
             <p><em>{plot}</em></p>
             <p>Starring: {actors}.</p>
