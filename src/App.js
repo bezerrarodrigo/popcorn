@@ -19,7 +19,7 @@ export default function App() {
   const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-  const [query, setQuery] = useState("star");
+  const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState(null);
 
 
@@ -45,11 +45,11 @@ export default function App() {
         setError('');
 
       } catch (err) {
-
         if(err.name !== 'AbortError') {
+          console.log(err.message);
           setError(err.message);
         }
-        
+
       } finally {
         setIsLoading(false);
       }
@@ -62,15 +62,15 @@ export default function App() {
       return;
     }
 
+    handleCloseSelectedMovie();
     fetchMovies();
 
     //clean up
-    return function () {
+    return () => {
       controller.abort();
     };
 
   }, [query]);
-
 
   function handleSelectMovie(id) {
     setSelectedId(prevState => prevState === id ? null : id);

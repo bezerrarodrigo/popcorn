@@ -50,7 +50,6 @@ export const MovieDetails = ({
       getMovieDetails(selectedId);
 
     } catch (e) {
-      console.log(e.message);
       setIsLoading(false);
     }
 
@@ -63,10 +62,25 @@ export const MovieDetails = ({
     // clean up
     return () => {
       document.title = 'usePopcorn';
-      console.log(`Clean up function for movie ${title}`);
     };
 
   }, [title]);
+
+  useEffect(() => {
+
+    function callback(evt) {
+      if(evt.key === 'Escape') {
+        onCloseSelectedMovie();
+      }
+    }
+
+    document.addEventListener('keydown', callback);
+
+    return () => {
+      document.removeEventListener('keydown', callback);
+    };
+
+  }, []);
 
   //functions
   function handleAddWatchedMovie() {
