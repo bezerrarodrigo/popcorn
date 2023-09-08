@@ -16,11 +16,31 @@ const KEY = 'cc5bf4c3';
 export default function App() {
 
   const [movies, setMovies] = useState([]);
-  const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState(null);
+  const [watched, setWatched] = useState(() => {
+    return JSON.parse(localStorage.getItem('watchedMovies'));
+  });
+  
+  function handleSelectMovie(id) {
+    setSelectedId(prevState => prevState === id ? null : id);
+  }
+
+  function handleCloseSelectedMovie() {
+    setSelectedId(null);
+  }
+
+  function handleAddWatchedMovie(movie) {
+    setWatched(prevState => [...prevState, movie]);
+  }
+
+  function handleRemoveWatchedMovie(id) {
+    setWatched(prevState => prevState.filter(movie => {
+      return movie.imdbID !== id;
+    }));
+  }
 
 
   useEffect(() => {
@@ -72,23 +92,9 @@ export default function App() {
 
   }, [query]);
 
-  function handleSelectMovie(id) {
-    setSelectedId(prevState => prevState === id ? null : id);
-  }
-
-  function handleCloseSelectedMovie() {
-    setSelectedId(null);
-  }
-
-  function handleAddWatchedMovie(movie) {
-    setWatched(prevState => [...prevState, movie]);
-  }
-
-  function handleRemoveWatchedMovie(id) {
-    setWatched(prevState => prevState.filter(movie => {
-      return movie.imdbID !== id;
-    }));
-  }
+  useEffect(() => {
+    localStorage.setItem('watchedMovies', JSON.stringify(watched));
+  }, [watched]);
 
 
   return (

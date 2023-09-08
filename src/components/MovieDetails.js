@@ -14,6 +14,23 @@ export const MovieDetails = ({
   const [isLoading, setIsLoading] = useState(false);
   const [userRating, setUserRating] = useState('');
 
+  //functions
+  function handleAddWatchedMovie() {
+
+    const newWatchedMovie = {
+      imdbID: selectedId,
+      poster,
+      title,
+      Year,
+      imdbRating: Number(imdbRating),
+      runtime: Number(runtime.split(' ').at(0)),
+      userRating,
+    };
+    onAddWatchedMovie(newWatchedMovie);
+    onCloseSelectedMovie();
+  }
+
+
   //derived states
   const isWatched = watchedMovies.map(movie => movie.imdbID).includes(selectedId);
   const watchedMovieUserRating = watchedMovies.find(movie => {
@@ -81,22 +98,6 @@ export const MovieDetails = ({
     };
 
   }, []);
-
-  //functions
-  function handleAddWatchedMovie() {
-
-    const newWatchedMovie = {
-      imdbID: selectedId,
-      poster,
-      title,
-      Year,
-      imdbRating: Number(imdbRating),
-      runtime: Number(runtime.split(' ').at(0)),
-      userRating,
-    };
-    onAddWatchedMovie(newWatchedMovie);
-    onCloseSelectedMovie();
-  }
 
 
   return (
