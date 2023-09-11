@@ -23,7 +23,7 @@ export default function App() {
   const [watched, setWatched] = useState(() => {
     return JSON.parse(localStorage.getItem('watchedMovies'));
   });
-  
+
   function handleSelectMovie(id) {
     setSelectedId(prevState => prevState === id ? null : id);
   }
@@ -50,7 +50,6 @@ export default function App() {
     async function fetchMovies() {
 
       try {
-
         setIsLoading(true);
         setError(''); //very important
         const response = await fetch(`https://www.omdbapi.com/?apikey=${KEY}&s=${query}`,
@@ -65,9 +64,9 @@ export default function App() {
         setError('');
 
       } catch (err) {
-        if(err.name !== 'AbortError') {
-          console.log(err.message);
+        if(err.name === 'AbortError') {
           setError(err.message);
+          console.log(err.message);
         }
 
       } finally {
