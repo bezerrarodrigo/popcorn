@@ -10,19 +10,17 @@ import {Loader} from './components/Loader';
 import {MovieList} from './components/MovieList';
 import {ErrorMessage} from './components/ErrorMessage';
 import {MovieDetails} from "./components/MovieDetails";
-
-const KEY = 'cc5bf4c3';
+import {useMovies} from "./hooks/useMovies";
 
 export default function App() {
 
-  const [movies, setMovies] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+  //states
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState(null);
   const [watched, setWatched] = useState(() => {
     return JSON.parse(localStorage.getItem('watchedMovies'));
   });
+  const {isLoading, error, movies} = useMovies(query, handleCloseSelectedMovie);
 
   function handleSelectMovie(id) {
     setSelectedId(prevState => prevState === id ? null : id);
@@ -44,62 +42,13 @@ export default function App() {
 
 
   useEffect(() => {
-
-    const controller = new AbortController();
-
-    async function fetchMovies() {
-
-      try {
-        setIsLoading(true);
-        setError(''); //very important
-        const response = await fetch(`https://www.omdbapi.com/?apikey=${KEY}&s=${query}`,
-          {signal: controller.signal})
-          .catch(() => {
-            throw new Error(`Something went wrong with movies fetch!`) ;
-          });
-
-        const data = await response.json();
-        if(data.Response === 'False') throw new Error('Movie not found!');
-        setMovies(data.Search);
-        setError('');
-
-      } catch (err) {
-        if(err.name === 'AbortError') {
-          setError(err.message);
-          console.log(err.message);
-        }
-
-      } finally {
-        setIsLoading(false);
-      }
-
-    }
-
-    if(query.length < 3) {
-      setMovies([]);
-      setError('');
-      return;
-    }
-
-    handleCloseSelectedMovie();
-    fetchMovies();
-
-    //clean up
-    return () => {
-      controller.abort();
-    };
-
-  }, [query]);
-
-  useEffect(() => {
     localStorage.setItem('watchedMovies', JSON.stringify(watched));
   }, [watched]);
-
 
   return (
     <>
       <Navbar>
-        <Search query={query} onQuery={setQuery}/>
+        <Search query={query} onQuery={setQuery} onCloseMovie={handleCloseSelectedMovie}/>
         <NumResults movies={movies}/>
       </Navbar>
       <Main>

@@ -1,6 +1,6 @@
 import {useEffect, useRef} from "react";
 
-export const Search = ({query, onQuery}) => {
+export const Search = ({query, onQuery, onCloseMovie}) => {
 
   const inputSearchEl = useRef(null);
 
@@ -16,6 +16,7 @@ export const Search = ({query, onQuery}) => {
       if(e.code === 'Enter') {
         inputSearchEl.current.focus();
         onQuery('');
+        onCloseMovie();
       }
     }
 
@@ -25,7 +26,7 @@ export const Search = ({query, onQuery}) => {
     return () => document.addEventListener('keydown', callback);
 
 
-  }, [onQuery]);
+  }, [onQuery, onCloseMovie]);
 
   return (
     <input
